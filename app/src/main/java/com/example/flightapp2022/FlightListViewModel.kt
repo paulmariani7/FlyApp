@@ -20,6 +20,7 @@ import java.io.InputStream
 class FlightListViewModel : ViewModel() {
 
     private val flightListLiveData = MutableLiveData<List<FlightModel>>(ArrayList())
+    private val clickedFlightLiveData = MutableLiveData<FlightModel>()
 
     fun getFlightListLiveData(): LiveData<List<FlightModel>> {
         return flightListLiveData
@@ -27,6 +28,14 @@ class FlightListViewModel : ViewModel() {
 
     private fun setFlightListLiveData(flights: List<FlightModel>) {
         flightListLiveData.value = flights
+    }
+
+    fun getClickedFlightLiveData(): LiveData<FlightModel> {
+        return clickedFlightLiveData
+    }
+
+    fun setClickedFlightLiveData(flight: FlightModel) {
+        clickedFlightLiveData.value = flight
     }
 
     fun doRequest(begin: Long, end: Long, isArrival: Boolean, icao: String) {

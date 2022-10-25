@@ -4,15 +4,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class FlightListActivity : AppCompatActivity() , FlightListAdapter.OnCellClickListener{
+class FlightListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_flight_list)
+
+        val isTablet = findViewById<FragmentContainerView>(R.id.fragment_map_container) != null
+
 
         val begin = intent.getLongExtra("BEGIN", 0)
         val end = intent.getLongExtra("END", 0)
@@ -28,19 +32,19 @@ class FlightListActivity : AppCompatActivity() , FlightListAdapter.OnCellClickLi
 
         viewModel.doRequest(begin, end, isArrival, icao!!)
 
-        viewModel.getFlightListLiveData().observe(this, Observer {
-            //findViewById<TextView>(R.id.textView).text = it.toString()
+        viewModel.getClickedFlightLiveData().observe(this, Observer {
+            // Afficher le bon vol
 
-            //Récupérer le recyclerView
-            val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-            // Attacher un Adapter
-            recyclerView.adapter = FlightListAdapter(it, this)
-            // Attacher un LayoutManager
-            recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            if (!isTablet) {
+                //remplacer le fragment
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.fragment_list_container, FlightMapFragment.newInstance("", ""))
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
         })
+
     }
 
-    override fun onCellClicked(flightModel: FlightModel) {
-        Log.i("CELL", "cell clicked $flightModel")
-    }
+
 }
