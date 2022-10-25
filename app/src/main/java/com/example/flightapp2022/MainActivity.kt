@@ -2,10 +2,10 @@ package com.example.flightapp2022
 
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.content.Intent
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
+import android.util.Log
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import java.util.*
@@ -30,13 +30,14 @@ class MainActivity : AppCompatActivity() {
         beginDateLabel.setOnClickListener { showDatePickerDialog(MainViewModel.DateType.BEGIN) }
         endDateLabel.setOnClickListener { showDatePickerDialog(MainViewModel.DateType.END) }
 
+        val airportSpinner = findViewById<Spinner>(R.id.airport_spinner)
+
         viewModel.getAirportNamesListLiveData().observe(this) {
             val adapter = ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item, it
             )
 
-            val airportSpinner = findViewById<Spinner>(R.id.airport_spinner)
             airportSpinner.adapter = adapter
         }
 
@@ -47,6 +48,32 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.getEndDateLiveData().observe(this) {
             endDateLabel.text = Utils.dateToString(it.time)
+        }
+
+        findViewById<Button>(R.id.button).setOnClickListener {
+            // Récupérer données pour la requête
+                // Date de début
+            val begin = viewModel.getBeginDateLiveData().value!!.timeInMillis / 1000
+                // Date de fin
+            val end = viewModel.getEndDateLiveData().value!!.timeInMillis / 1000
+                // Airport
+            val selectedAirportIndex = airportSpinner.selectedItemPosition
+            val airport = viewModel.getAirportListLiveData().value!![selectedAirportIndex]
+            val icao = airport.icao
+                // Depart ou arrivée
+            val isArrival = findViewById<Switch>(R.id.airport_switch).isChecked
+
+
+            // Ouvrir une nouvelle activité avec les infos de la requête
+
+            val intent = Intent(this, FlightListActivity::class.java)
+
+            intent.putExtra("BEGIN",begin)
+            intent.putExtra("END",end)
+            intent.putExtra("IS_ARRIVAL",isArrival)
+            intent.putExtra("ICAO",icao)
+
+            startActivity(intent)
         }
 
 
