@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class FlightListActivity : AppCompatActivity() {
+class FlightListActivity : AppCompatActivity() , FlightListAdapter.OnCellClickListener{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_flight_list)
@@ -34,9 +34,13 @@ class FlightListActivity : AppCompatActivity() {
             //Récupérer le recyclerView
             val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
             // Attacher un Adapter
-            recyclerView.adapter = FlightListAdapter(it)
+            recyclerView.adapter = FlightListAdapter(it, this)
             // Attacher un LayoutManager
             recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         })
+    }
+
+    override fun onCellClicked(flightModel: FlightModel) {
+        Log.i("CELL", "cell clicked $flightModel")
     }
 }

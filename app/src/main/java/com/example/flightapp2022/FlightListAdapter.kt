@@ -10,7 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
  * Created by sergio on 25/10/2022
  * All rights reserved GoodBarber
  */
-class FlightListAdapter(val flightList: List<FlightModel>) : RecyclerView.Adapter<FlightListAdapter.FlightListCellViewHolder>() {
+class FlightListAdapter(val flightList: List<FlightModel>, val cellClickListener: OnCellClickListener) :
+    RecyclerView.Adapter<FlightListAdapter.FlightListCellViewHolder>() {
+
+    interface OnCellClickListener {
+        fun onCellClicked(flightModel: FlightModel)
+    }
 
     class FlightListCellViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -30,6 +35,9 @@ class FlightListAdapter(val flightList: List<FlightModel>) : RecyclerView.Adapte
         val cell = holder.itemView as FlightInfoCell
         cell.setBackgroundColor(if (position % 2 == 0) Color.YELLOW else Color.GRAY)
         cell.bindData(flight)
+        cell.setOnClickListener {
+            cellClickListener.onCellClicked(flight)
+        }
     }
 
     override fun getItemCount(): Int {
