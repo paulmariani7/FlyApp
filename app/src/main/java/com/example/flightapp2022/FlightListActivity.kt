@@ -6,6 +6,8 @@ import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class FlightListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +29,14 @@ class FlightListActivity : AppCompatActivity() {
         viewModel.doRequest(begin, end, isArrival, icao!!)
 
         viewModel.getFlightListLiveData().observe(this, Observer {
-            findViewById<TextView>(R.id.textView).text = it.toString()
+            //findViewById<TextView>(R.id.textView).text = it.toString()
+
+            //Récupérer le recyclerView
+            val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+            // Attacher un Adapter
+            recyclerView.adapter = FlightListAdapter(it)
+            // Attacher un LayoutManager
+            recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         })
     }
 }
