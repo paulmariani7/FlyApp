@@ -3,6 +3,9 @@ package com.example.flightapp2022
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 
 class FlightListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,9 +17,17 @@ class FlightListActivity : AppCompatActivity() {
         val isArrival = intent.getBooleanExtra("IS_ARRIVAL", false)
         val icao = intent.getStringExtra("ICAO")
 
+        val viewModel = ViewModelProvider(this).get(FlightListViewModel::class.java)
 
         Log.i("MAIN ACTIVITY", "begin = $begin \n end = $end \n icao = $icao \n is arrival = $isArrival")
 
-        RequestManager.get("https://google.fr", HashMap())
+        // DO NOT DO REQUEST IN ACTIVITY LIKE THE COMMENT BELOW
+        //RequestManager.get("https://google.fr", HashMap())
+
+        viewModel.doRequest(begin, end, isArrival, icao!!)
+
+        viewModel.getFlightListLiveData().observe(this, Observer {
+            findViewById<TextView>(R.id.textView).text = it.toString()
+        })
     }
 }

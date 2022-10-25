@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.flightapp2022">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".FlightApplication"
         android:allowBackup="true"
