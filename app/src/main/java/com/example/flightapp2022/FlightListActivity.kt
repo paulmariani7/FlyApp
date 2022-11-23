@@ -15,7 +15,7 @@ class FlightListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_flight_list)
 
-        val isTablet = findViewById<FragmentContainerView>(R.id.fragment_map_container) != null
+       // val isTablet = findViewById<FragmentContainerView>(R.id.fragment_map_container) != null
 
 
         val begin = intent.getLongExtra("BEGIN", 0)
@@ -35,13 +35,13 @@ class FlightListActivity : AppCompatActivity() {
         viewModel.getClickedFlightLiveData().observe(this, Observer {
             // Afficher le bon vol
 
-            if (!isTablet) {
+             /*if (!isTablet) {
                 //remplacer le fragment
                 val transaction = supportFragmentManager.beginTransaction()
                 transaction.replace(R.id.fragment_list_container, FlightMapFragment.newInstance("", ""))
                 transaction.addToBackStack(null)
                 transaction.commit()
-            }
+            } */
         })
 
     }
