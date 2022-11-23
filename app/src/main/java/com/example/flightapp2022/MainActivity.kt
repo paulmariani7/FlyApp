@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         endDateLabel.setOnClickListener { showDatePickerDialog(MainViewModel.DateType.END) }
 
         val airportSpinner = findViewById<Spinner>(R.id.airport_spinner)
+        val airportSpinnerDestination = findViewById<Spinner>(R.id.airport_spinner2)
 
         viewModel.getAirportNamesListLiveData().observe(this) {
             val adapter = ArrayAdapter<String>(
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             )
 
             airportSpinner.adapter = adapter
+            airportSpinnerDestination.adapter = adapter
         }
 
 
@@ -58,8 +60,13 @@ class MainActivity : AppCompatActivity() {
             val end = viewModel.getEndDateLiveData().value!!.timeInMillis / 1000
                 // Airport
             val selectedAirportIndex = airportSpinner.selectedItemPosition
+            val selectedAirportIndexDestionation = airportSpinnerDestination.selectedItemPosition
+
+            val airportDestination = viewModel.getAirportListLiveData().value!![selectedAirportIndexDestionation]
             val airport = viewModel.getAirportListLiveData().value!![selectedAirportIndex]
+
             val icao = airport.icao
+            var icaoDestatination = airportDestination.icao
                 // Depart ou arrivée
             val isArrival = findViewById<Switch>(R.id.airport_switch).isChecked
 
@@ -72,6 +79,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("END",end)
             intent.putExtra("IS_ARRIVAL",isArrival)
             intent.putExtra("ICAO",icao)
+            intent.putExtra("ICAODESTAINATION",icaoDestatination)
 
             startActivity(intent)
         }

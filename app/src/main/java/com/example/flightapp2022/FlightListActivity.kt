@@ -23,6 +23,9 @@ class FlightListActivity : AppCompatActivity() {
         val isArrival = intent.getBooleanExtra("IS_ARRIVAL", false)
         val icao = intent.getStringExtra("ICAO")
 
+        val icaoDestination = intent.getStringExtra("ICAODESTAINATION")
+        Log.i("Destination", "$icaoDestination");
+
         val viewModel = ViewModelProvider(this).get(FlightListViewModel::class.java)
 
         Log.i("MAIN ACTIVITY", "begin = $begin \n end = $end \n icao = $icao \n is arrival = $isArrival")
