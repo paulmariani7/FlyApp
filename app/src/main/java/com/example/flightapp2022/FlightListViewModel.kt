@@ -6,12 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.InputStream
+
 
 /**
  * Created by sergio on 25/10/2022
@@ -38,7 +37,7 @@ class FlightListViewModel : ViewModel() {
         clickedFlightLiveData.value = flight
     }
 
-    fun doRequest(begin: Long, end: Long, isArrival: Boolean, icao: String) {
+    fun doRequest(begin: Long, end: Long, isArrival: Boolean, icao: String, icaoDestination: String) {
 
         viewModelScope.launch {
 
@@ -47,6 +46,7 @@ class FlightListViewModel : ViewModel() {
             params.put("begin", begin.toString())
             params.put("end", end.toString())
             params.put("airport", icao)
+
 
             val result = withContext(Dispatchers.IO) {
                 RequestManager.getSuspended(url, params)
@@ -61,8 +61,17 @@ class FlightListViewModel : ViewModel() {
                 for (flightObject in jsonElement.asJsonArray) {
                     flightList.add(Gson().fromJson(flightObject.asJsonObject, FlightModel::class.java))
                 }
+                Log.e("icaoDestination","$icaoDestination")
 
-                setFlightListLiveData(flightList)
+
+                var flightListFilter: ArrayList<FlightModel> = flightList.filter { flightModel -> flightModel.estArrivalAirport == icaoDestination } as ArrayList<FlightModel>
+                Log.e("FILTRO", "$flightListFilter")
+                if(icaoDestination != icao && flightListFilter.isNotEmpty()){
+                    setFlightListLiveData(flightListFilter)
+                }else {
+                    setFlightListLiveData(flightList)
+                }
+
                 // Equivalent à
                 //flightListLiveData.value =  flightList
 

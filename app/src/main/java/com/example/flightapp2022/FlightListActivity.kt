@@ -33,7 +33,7 @@ class FlightListActivity : AppCompatActivity() {
         // DO NOT DO REQUEST IN ACTIVITY LIKE THE COMMENT BELOW
         //RequestManager.get("https://google.fr", HashMap())
 
-        viewModel.doRequest(begin, end, isArrival, icao!!)
+        viewModel.doRequest(begin, end, isArrival, icao!!,icaoDestination!!)
 
         viewModel.getClickedFlightLiveData().observe(this, Observer {
             // Afficher le bon vol

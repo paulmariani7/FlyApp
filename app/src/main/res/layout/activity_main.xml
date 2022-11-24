@@ -102,6 +102,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="80dp"
+        android:background="#E8E3E3"
         app:layout_constraintBottom_toTopOf="@+id/airport_spinner2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
