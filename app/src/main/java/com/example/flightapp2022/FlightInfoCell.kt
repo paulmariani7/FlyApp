@@ -1,11 +1,14 @@
 package com.example.flightapp2022
 
 import android.content.Context
+
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
+
 
 class FlightInfoCell : LinearLayout {
 
@@ -61,6 +64,7 @@ class FlightInfoCell : LinearLayout {
     }
 
     private fun initLayout() {
+
         LayoutInflater.from(context).inflate(R.layout.flight_cell, this, true)
         bindViews()
     }

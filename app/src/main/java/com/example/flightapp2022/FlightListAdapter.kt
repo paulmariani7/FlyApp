@@ -1,10 +1,13 @@
 package com.example.flightapp2022
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.common.collect.Maps
 
 /**
  * Created by sergio on 25/10/2022
@@ -15,7 +18,15 @@ class FlightListAdapter(val flightList: List<FlightModel>, val cellClickListener
 
     interface OnCellClickListener {
         fun onCellClicked(flightModel: FlightModel)
+
     }
+
+    fun changeActivity(context: Context, text: String) {
+        val intent = Intent(context, MapsActivity::class.java)
+        intent.putExtra("text", text)
+        context.startActivity(intent)
+    }
+
 
     class FlightListCellViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -36,6 +47,10 @@ class FlightListAdapter(val flightList: List<FlightModel>, val cellClickListener
         cell.setBackgroundColor(if (position % 2 == 0) Color.YELLOW else Color.GRAY)
         cell.bindData(flight)
         cell.setOnClickListener {
+            Log.i("click en celda", "$cell")
+            val context = holder.itemView.getContext()
+           changeActivity(context,"nada");
+
             cellClickListener.onCellClicked(flight)
         }
     }
