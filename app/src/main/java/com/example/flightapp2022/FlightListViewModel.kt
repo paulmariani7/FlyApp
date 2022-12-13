@@ -82,4 +82,44 @@ class FlightListViewModel : ViewModel() {
         }
 
     }
+
+    fun doRequestFlight( icao: String, time: String) {
+
+        viewModelScope.launch {
+
+            val url = "https://opensky-network.org/api/tracks/all"
+            val params = HashMap<String, String>()
+            params.put("icao24", icao.toString())
+            params.put("time", time.toString())
+
+
+            val result = withContext(Dispatchers.IO) {
+                RequestManager.getSuspended(url, params)
+            }
+            if (result != null) {
+                Log.i("VUELO INDIVIDUAL", result)
+
+                val flightList = ArrayList<FlightModel>()
+                val parser = JsonParser()
+                val jsonElement = parser.parse(result)
+
+                for (flightObject in jsonElement.asJsonArray) {
+                    flightList.add(Gson().fromJson(flightObject.asJsonObject, FlightModel::class.java))
+                }
+
+                setFlightListLiveData(flightList)
+
+
+                // Equivalent à
+                //flightListLiveData.value =  flightList
+
+            } else {
+                Log.e("REQUEST", "ERROR NO RESULT")
+            }
+
+        }
+
+    }
+
+
 }

@@ -21,9 +21,12 @@ class FlightListAdapter(val flightList: List<FlightModel>, val cellClickListener
 
     }
 
-    fun changeActivity(context: Context, text: String) {
+    fun changeActivity(context: Context, arrival: String, departure:String , lastSeen:String , icao24:String) {
         val intent = Intent(context, MapsActivity::class.java)
-        intent.putExtra("text", text)
+        intent.putExtra("arrival", arrival)
+        intent.putExtra("departure", departure)
+        intent.putExtra("lastSeen", lastSeen)
+        intent.putExtra("icao24", icao24)
         context.startActivity(intent)
     }
 
@@ -47,9 +50,17 @@ class FlightListAdapter(val flightList: List<FlightModel>, val cellClickListener
         cell.setBackgroundColor(if (position % 2 == 0) Color.YELLOW else Color.GRAY)
         cell.bindData(flight)
         cell.setOnClickListener {
-            Log.i("click en celda", "$cell")
+            Log.i("click en celda", "$flight")
             val context = holder.itemView.getContext()
-           changeActivity(context,"nada");
+            val arrive = flight.estArrivalAirport
+            val departure = flight.estDepartureAirport
+            val lastSeen = flight.lastSeen
+            val icao24 = flight.icao24
+
+
+
+            Log.i("prueba", "$arrive, $departure ")
+           changeActivity(context,"$arrive" ,"$departure" , "$lastSeen", "$icao24");
 
             cellClickListener.onCellClicked(flight)
         }

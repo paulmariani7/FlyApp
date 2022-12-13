@@ -15,4 +15,5 @@ data class FlightModel (val icao24: String,
                         val estArrivalAirportHorizDistance: Int,
                         val estArrivalAirportVertDistance: Int,
                         val departureAirportCandidatesCount: Int,
-                        val arrivalAirportCandidatesCount: Int)
+                        val arrivalAirportCandidatesCount: Int,
+                        val path: Array<Any>)
